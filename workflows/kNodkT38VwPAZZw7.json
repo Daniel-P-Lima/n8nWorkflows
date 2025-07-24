@@ -665,7 +665,7 @@
               "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
               "name": "repo.path",
               "type": "string",
-              "value": "=workflows/{{json.tags[0]}}"
+              "value": "=workflows/{{json.tags[0].name}}"
             }
           ]
         },
@@ -841,6 +841,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-24T14:09:35.000Z",
-  "versionId": "8ae4a29b-1604-47d2-82f7-7eadefe9f126"
+  "updatedAt": "2025-07-24T14:24:58.000Z",
+  "versionId": "5c2d4b05-8cc6-4ab4-a182-7c3b2e798cc3"
 }
