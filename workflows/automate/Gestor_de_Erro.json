@@ -1,0 +1,138 @@
+{
+  "active": false,
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-24T12:03:36.474Z",
+  "id": "juZ6bR6U7ks8zGJg",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Gestor_de_Erro",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdcf057d-dcec-4ec2-b5a0-d241fbf26f2a",
+              "name": "execution.id",
+              "value": "={{ $json.execution.id }}",
+              "type": "number"
+            },
+            {
+              "id": "ba5a53e7-b15a-4c5f-a27e-5460490dfe96",
+              "name": "execution.url",
+              "value": "={{ $json.execution.url }}",
+              "type": "string"
+            },
+            {
+              "id": "c20352fd-92e7-401e-91d9-3b16e16e370b",
+              "name": "execution.error.message",
+              "value": "={{ $json.execution.error.message }}",
+              "type": "string"
+            },
+            {
+              "id": "9b09b13c-71f4-4a3a-9031-736f67d8ceb9",
+              "name": "execution.error.stack",
+              "value": "={{ $json.execution.error.stack }}",
+              "type": "string"
+            },
+            {
+              "id": "1f097b3f-1421-4635-a250-2391d6f1ab21",
+              "name": "execution.lastNodeExecuted",
+              "value": "={{ $json.execution.lastNodeExecuted }}",
+              "type": "string"
+            },
+            {
+              "id": "6ddee16c-9ca3-419c-8a08-f168aadb9833",
+              "name": "workflow.name",
+              "value": "={{ $json.workflow.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bd3dd3c1-cbdc-49d9-9724-84b4faab6a57",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "d968e8d5-4eb7-4f29-a583-f0379c05696a",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "-4936872469",
+        "text": "=*Erro ao executar workflow no n8n*\n\n*Workflow:* `{{ $json.workflow.name }}`\n*Último node executado:* `{{ $json.execution.lastNodeExecuted }}`\n*Mensagem de erro:* \n`{{ $json.execution.error.message }}`\n\n*Stack técnico resumido:*\n```{{ $json.execution.error.stack.split('\\n')[0] }}```\n\n*URL da execução:* [Clique aqui para ver no n8n]({{ $json.execution.url }})",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e7b2bb9b-d267-4f1c-9d79-a3c570c21bf1",
+      "name": "Send a text message",
+      "webhookId": "b58cfe12-1a5a-4385-86a7-47f8672e6e9b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1cP0oPNKKi3w6UE0",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-24T14:10:01.331Z",
+      "updatedAt": "2025-07-24T14:10:01.331Z",
+      "id": "XVyDcQFu3t4hlI1r",
+      "name": "automate"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-24T14:44:15.000Z",
+  "versionId": "5782e8b2-7735-4fc2-b4fc-e4b15fb090a2"
+}
