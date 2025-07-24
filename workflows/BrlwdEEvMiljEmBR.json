@@ -1,0 +1,294 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-23T18:50:21.228Z",
+  "id": "BrlwdEEvMiljEmBR",
+  "isArchived": false,
+  "meta": null,
+  "name": "Relatorio Consolidado Manual",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        112
+      ],
+      "id": "32d159f6-0ab4-429a-b93e-6116cc405a1b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": " https://daniel.cws.cslr-wga.net.br/relatorios/consolidado",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "empresa",
+              "value": "0"
+            },
+            {
+              "name": "dataini",
+              "value": "={{ $json.data_inicio }}"
+            },
+            {
+              "name": "=datafim",
+              "value": "={{ $json.data_fim }}"
+            },
+            {
+              "name": "formato",
+              "value": "PDF"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "ede7f3d4-bcaf-4062-9611-25a8773c1d12",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "files",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "638777d5-384c-4f85-931e-d3888f8ad7a3",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "sendTo": "limadanielpereira@gmail.com",
+        "subject": "Relatórios Clientes",
+        "message": "Segue em anexo os relatórios dos clientes",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "e1776212-7e0d-451f-bf95-edd1159f2479",
+      "name": "Send a message",
+      "webhookId": "6c9f81d6-21b1-4718-91e8-f16df35f1340",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dFwmTHYHZLzjshSr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://daniel.cws.cslr-wga.net.br/relatorios/download/{{ $json.files }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "5390b13d-cccd-4258-9120-907ca62fc605",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cria um único item com múltiplos binários\nconst combinedBinary = {};\nitems.forEach((item, index) => {\n  const binaryKey = item.binary && Object.keys(item.binary)[0];\n  if (binaryKey) {\n    combinedBinary[`file${index + 1}.pdf`] = item.binary[binaryKey];\n  }\n});\n\nreturn [{\n  binary: combinedBinary\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        0
+      ],
+      "id": "e1a5abcc-dcb7-4815-9eb3-ada6703996bc",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "={{ Object.keys($binary).join(',') }}",
+        "fileName": "relatorios.zip"
+      },
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "fc24169c-8379-40be-bc72-55555de3409a",
+      "name": "Compression"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst ano = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();\nconst mes = now.getMonth() === 0 ? 11 : now.getMonth() - 1;\n\nconst primeiroDia = new Date(ano, mes, 1);\nconst ultimoDia = new Date(ano, mes + 1, 0);\n\nreturn [\n  {\n    json: {\n      data_inicio: primeiroDia.toISOString().split('T')[0],\n      data_fim: ultimoDia.toISOString().split('T')[0],\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "29382e8d-7199-4f9f-9688-5bd16075b3b7",
+      "name": "Code2"
+    }
+  ],
+  "pinData": {
+    "HTTP Request": [
+      {
+        "json": {
+          "success": true,
+          "titulo": "tituloSucesso",
+          "msg": "Consolidado gerado com sucesso.",
+          "files": [
+            "CS-BALAROTI-20250601-20250630-15.pdf",
+            "CS-CHECK-UP-20250601-20250630-15.pdf",
+            "CS-CIONC-20250601-20250630-15.pdf",
+            "CS-CONATEC-20250601-20250630-15.pdf",
+            "CS-CONSEILLER-20250601-20250630-15.pdf",
+            "CS-DOCTORALIA-20250601-20250630-15.pdf",
+            "CS-FATIMA-20250601-20250630-14.pdf",
+            "CS-FEP-20250601-20250630-14.pdf",
+            "CS-I.POLICLIN-20250601-20250630-14.pdf",
+            "CS-ICTR-20250601-20250630-14.pdf",
+            "CS-IOC-20250601-20250630-14.pdf",
+            "CS-ISSC---HCC-20250601-20250630-14.pdf",
+            "CS-ISSC---ITJ-20250601-20250630-14.pdf",
+            "CS-LUMICENTER-20250601-20250630-14.pdf",
+            "CS-MAGIUS-20250601-20250630-14.pdf",
+            "CS-MATERNIDAD-20250601-20250630-14.pdf",
+            "CS-POLI-SAUDE-20250601-20250630-14.pdf",
+            "CS-PRIME-20250601-20250630-14.pdf",
+            "CS-PROVINCIA-20250601-20250630-14.pdf",
+            "CS-QUANTA-DIA-20250601-20250630-14.pdf",
+            "CS-REDE-ONE-C-20250601-20250630-14.pdf",
+            "CS-ROHDEN-20250601-20250630-14.pdf",
+            "CS-SAUDE-PINH-20250601-20250630-14.pdf",
+            "CS-SCMPG-20250601-20250630-14.pdf",
+            "CS-TERRA-RICA-20250601-20250630-14.pdf",
+            "CS-UNIMED-CUR-20250601-20250630-14.pdf",
+            "CS-UNIMED-PAL-20250601-20250630-14.pdf",
+            "CS-UNIMED-PON-20250601-20250630-14.pdf",
+            "CS-WEEGA-TECH-20250601-20250630-14.pdf"
+          ],
+          "tipo": "pdf",
+          "periodo": "Período: 2025-06-01 / 2025-06-30"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-24T14:10:01.331Z",
+      "updatedAt": "2025-07-24T14:10:01.331Z",
+      "id": "XVyDcQFu3t4hlI1r",
+      "name": "automate"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-24T14:18:12.000Z",
+  "versionId": "25f814a0-17ec-4337-ab87-956eb931fc5e"
+}
