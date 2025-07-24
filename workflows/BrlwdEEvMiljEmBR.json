@@ -280,8 +280,15 @@
     "executionOrder": "v1"
   },
   "staticData": null,
-  "tags": [],
+  "tags": [
+    {
+      "createdAt": "2025-07-24T14:10:01.331Z",
+      "updatedAt": "2025-07-24T14:10:01.331Z",
+      "id": "XVyDcQFu3t4hlI1r",
+      "name": "automate"
+    }
+  ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-23T18:50:21.228Z",
-  "versionId": "0086f414-0b78-45af-aaa8-42f40e83bb69"
+  "updatedAt": "2025-07-24T14:18:12.000Z",
+  "versionId": "25f814a0-17ec-4337-ab87-956eb931fc5e"
 }
