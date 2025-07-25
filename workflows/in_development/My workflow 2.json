@@ -1,0 +1,46 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-07-24T16:24:09.423Z",
+  "id": "11xEU294ZW0T248k",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5afcdeb2-ffde-437b-b6a9-60101f2f4e0a",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-25T14:55:01.579Z",
+      "updatedAt": "2025-07-25T14:55:01.579Z",
+      "id": "UISS80SpE49LmsKK",
+      "name": "in_development"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-25T14:55:08.000Z",
+  "versionId": "cf0134d1-672d-430b-9d17-bacbbdd4bdc1"
+}
