@@ -1,0 +1,189 @@
+{
+  "active": true,
+  "connections": {
+    "Recebe PDFs": {
+      "main": [
+        [
+          {
+            "node": "Criar array PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar array PDF": {
+      "main": [
+        [
+          {
+            "node": "Baixar PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar PDF": {
+      "main": [
+        [
+          {
+            "node": "Juntar PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar PDF": {
+      "main": [
+        [
+          {
+            "node": "Comprimir PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comprimir PDF": {
+      "main": [
+        [
+          {
+            "node": "Envia email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envia email": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-07-23T16:31:30.672Z",
+  "id": "WUA5U83lCEsKOfzB",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Relatorio_Consolidado_Por_Botao_SEGA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4d27fca5-69a0-4289-ba2d-8acc8310ff71",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -192
+      ],
+      "id": "6d23fd03-5b53-438f-84a8-f1320b0f82f0",
+      "name": "Recebe PDFs",
+      "webhookId": "4d27fca5-69a0-4289-ba2d-8acc8310ff71"
+    },
+    {
+      "parameters": {
+        "jsCode": "const arquivos = items[0].json.body[0];\n\nreturn arquivos.map(nome => ({\n  json: { file: nome }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        -192
+      ],
+      "id": "5296726d-20d2-4f59-b001-f377f400a667",
+      "name": "Criar array PDF"
+    },
+    {
+      "parameters": {
+        "url": "=https://daniel.cws.cslr-wga.net.br/relatorios/download/{{ $json.file }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        -192
+      ],
+      "id": "d84f894a-c414-4f2d-a090-1aaf230bd4fa",
+      "name": "Baixar PDF"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cria um único item com múltiplos binários\nconst combinedBinary = {};\nitems.forEach((item, index) => {\n  const binaryKey = item.binary && Object.keys(item.binary)[0];\n  if (binaryKey) {\n    combinedBinary[`file${index + 1}.pdf`] = item.binary[binaryKey];\n  }\n});\n\nreturn [{\n  binary: combinedBinary\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -192
+      ],
+      "id": "1cf557c1-3cc2-425f-9316-56cf628a0628",
+      "name": "Juntar PDF"
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "={{ Object.keys($binary).join(',') }}",
+        "fileName": "relatorios.zip"
+      },
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        864,
+        -192
+      ],
+      "id": "163ed53c-3c70-414e-872e-75572ef07153",
+      "name": "Comprimir PDF"
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@weega.com.br",
+        "toEmail": "daniel.lima@weega.com.br",
+        "subject": "Relatórios",
+        "html": "=Segue em anexo os relatórios consolidados\n{{ $json.periodo }}",
+        "options": {
+          "attachments": "data"
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        -192
+      ],
+      "id": "43440a66-8f0c-4689-91ff-71e80933e4c7",
+      "name": "Envia email",
+      "webhookId": "10a854e7-760a-4697-ba58-d43bfbcf4f01",
+      "credentials": {
+        "smtp": {
+          "id": "iVadhBTmXa28Twhz",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "juZ6bR6U7ks8zGJg"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-24T14:10:01.331Z",
+      "updatedAt": "2025-07-24T14:10:01.331Z",
+      "id": "XVyDcQFu3t4hlI1r",
+      "name": "automate"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-07-25T14:41:04.000Z",
+  "versionId": "6b2ba034-9c89-46f8-8a57-7ace1089e574"
+}
