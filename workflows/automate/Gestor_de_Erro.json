@@ -1,0 +1,243 @@
+{
+  "active": false,
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send email1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-24T12:03:36.474Z",
+  "id": "juZ6bR6U7ks8zGJg",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Gestor_de_Erro",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "d968e8d5-4eb7-4f29-a583-f0379c05696a",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "-4936872469",
+        "text": "=*Erro ao executar workflow no n8n*\n\n*Workflow:* `{{ $json.workflow.name }}`\n*Último node executado:* `{{ $json.execution.lastNodeExecuted }}`\n*Mensagem de erro:* \n`{{ $json.execution.error.message }}`\n\n*URL da execução:* [Clique aqui para ver no n8n]({{ $json.execution.url }})",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        -112
+      ],
+      "id": "e7b2bb9b-d267-4f1c-9d79-a3c570c21bf1",
+      "name": "Send a text message",
+      "webhookId": "b58cfe12-1a5a-4385-86a7-47f8672e6e9b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1cP0oPNKKi3w6UE0",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "840b8278-cc06-4f96-b92c-abda8a96e946",
+              "leftValue": "={{ $json.workflow.name }}",
+              "rightValue": "Relatorio_Consolidado_Por_Botao_SEGA",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        0
+      ],
+      "id": "0854bab2-e34f-4913-b946-96427ddd7d1a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "-4936872469",
+        "text": "=*Erro ao executar workflow no n8n*\n\n*Workflow:* `{{ $json.workflow.name }}`\n*Último node executado:* `{{ $json.execution.lastNodeExecuted }}`\n*Mensagem de erro:* \n`{{ $json.execution.error.message }}`\n\n*URL da execução:* [Clique aqui para ver no n8n]({{ $json.execution.url }})",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        64
+      ],
+      "id": "57d182fa-47ed-4d2b-bda9-f7f4023dde57",
+      "name": "Send a text message1",
+      "webhookId": "b58cfe12-1a5a-4385-86a7-47f8672e6e9b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1cP0oPNKKi3w6UE0",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@weega.com.br",
+        "toEmail": "daniel.lima@weega.com.br",
+        "subject": "Relatórios",
+        "html": "=Houve um erro na geração do relatório e a equipe DSA já está resolvendo!",
+        "options": {
+          "attachments": "data"
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        -288
+      ],
+      "id": "11bde6f6-a661-427f-bb45-0db0e0029f9a",
+      "name": "Send email1",
+      "webhookId": "10a854e7-760a-4697-ba58-d43bfbcf4f01",
+      "credentials": {
+        "smtp": {
+          "id": "iVadhBTmXa28Twhz",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09917a7d-60e2-413c-8c1f-6b057ed231cf",
+              "name": "execution.id",
+              "value": "={{ $json.execution.id }}",
+              "type": "number"
+            },
+            {
+              "id": "666697fe-95c3-437a-9b87-9b64b57b8854",
+              "name": "execution.url",
+              "value": "={{ $json.execution.url }}",
+              "type": "string"
+            },
+            {
+              "id": "b6b3e974-43a6-4c8b-aeb4-6686b7000ef2",
+              "name": "execution.error",
+              "value": "={{ $json.execution.error }}",
+              "type": "object"
+            },
+            {
+              "id": "c99cb6d4-2cce-479e-9817-ceedd604caeb",
+              "name": "execution.lastNodeExecuted",
+              "value": "={{ $json.execution.lastNodeExecuted }}",
+              "type": "string"
+            },
+            {
+              "id": "d1cb4e47-a126-481a-9799-ac9ce178b84c",
+              "name": "execution.mode",
+              "value": "={{ $json.execution.mode }}",
+              "type": "string"
+            },
+            {
+              "id": "778e66da-7813-4302-a690-aa001c57ceff",
+              "name": "workflow",
+              "value": "={{ $json.workflow }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "821af0f2-3129-4110-a47b-f108605a9292",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-24T14:10:01.331Z",
+      "updatedAt": "2025-07-24T14:10:01.331Z",
+      "id": "XVyDcQFu3t4hlI1r",
+      "name": "automate"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-25T12:36:37.000Z",
+  "versionId": "e1d8f8bb-2295-4edb-a414-028f2acbd68a"
+}
